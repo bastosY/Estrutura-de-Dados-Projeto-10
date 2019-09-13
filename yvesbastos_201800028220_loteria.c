@@ -75,7 +75,6 @@ int main(int argc, char const *argv[])
     FILE* input = fopen(argv[1], "r");
 	FILE* output = fopen(argv[2], "w");
 
-
     int numbBet, cash, bet, actul;
     int result[10];
     char id[129];
@@ -114,7 +113,6 @@ int main(int argc, char const *argv[])
         heapifyMin(vectorMin, numbBet, i);
     }
 
-   
     int winners = 0, loosers = 0;
 
     for(int i = 0; i < numbBet; i++){
@@ -126,18 +124,33 @@ int main(int argc, char const *argv[])
         }
 
     }
+    
     fprintf(output, "[%d:%d:%d]\n", winners, vectorMax[0].value, (cash / 2) /winners);
+    int max = vectorMax[0].value;
+    int aux = numbBet;
+
     for(int i = 0; i < numbBet; i++){
-         if(vectorMax[i].value == vectorMax[0].value){
-            fprintf(output, "%s\n", vectorMax[i].id);
+        if(vectorMax[0].value == max){
+            fprintf(output, "%s\n", vectorMax[0].id);
+            vectorMax[0] = vectorMax[aux - 1];
+            aux--;
+            heapifyMax(vectorMax, aux, 0);
         }
     }
+
     fprintf(output, "[%d:%d:%d]\n", loosers, vectorMin[0].value, (cash / 2) / loosers);
+    int min = vectorMin[0].value;
+    aux = numbBet;
+
     for(int i = 0; i < numbBet; i++){
-         if(vectorMin[i].value == vectorMin[0].value){
-            fprintf(output, "%s\n", vectorMin[i].id);
+         if(vectorMin[0].value == min){
+            fprintf(output, "%s\n", vectorMin[0].id);
+            vectorMin[0] = vectorMin[aux - 1];
+            aux--;
+            heapifyMin(vectorMin, aux, 0);
         }
     }
+
     fclose(input);
 	fclose(output);
     
